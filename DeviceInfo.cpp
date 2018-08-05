@@ -75,6 +75,12 @@ int main(void) {
 			checkError(err, "Getting device OpenCL C version");
 			printf("\t\tVersion: %s\n", string);
 
+			// Get Max. Compute units
+			cl_uint num;
+			err = clGetDeviceInfo(device[j], CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(cl_uint), &num, NULL);
+			checkError(err, "Getting devicie max compute units");
+			printf("\t\tMax. Compute Units: %d\n", num);
+
 			// Get local memory
 			cl_ulong mem_size;
 			err = clGetDeviceInfo(device[j], CL_DEVICE_LOCAL_MEM_SIZE, sizeof(cl_ulong), &mem_size, NULL);
@@ -85,6 +91,33 @@ int main(void) {
 			err = clGetDeviceInfo(device[j], CL_DEVICE_GLOBAL_MEM_SIZE, sizeof(cl_ulong), &mem_size, NULL);
 			checkError(err, "Getting device global memory");
 			printf("\t\tGlobal Memory Size: %llu MB\n", mem_size / (1024 * 1024));
+
+			// Get maximum buffer alloc. size
+			err = clGetDeviceInfo(device[j], CL_DEVICE_MAX_MEM_ALLOC_SIZE, sizeof(cl_ulong), &mem_size, NULL);
+			checkError(err, "Getting devicie max alocation size");
+			printf("\t\tMax Alloc size: %llu MB\n", mem_size / (1024 * 1024));
+
+			// Get work-group size information
+			size_t size;
+			err = clGetDeviceInfo(device[j], CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(size_t), &size, NULL);
+			checkError(err, "Getting devicie max work-group size");
+			printf("\t\tMax Work-group Total Size: %ld\n", size);
+
+			// Find the maximum dimension of the work-group
+			err = clGetDeviceInfo(device[j], CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS, sizeof(cl_uint), &num, NULL);
+			checkError(err, "Getting device max work-item dims");
+			
+			// Get max. dimension of the work-groups
+			size_t *dims;
+			dims = (size_t*)malloc(num * sizeof(size_t));
+			err = clGetDeviceInfo(device[j], CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(dims)*num, &dims[0], NULL);
+			checkError(err, "Getting device mas work-item sizes");
+			printf("\t\tMax Work-group Dims: ( ");
+			for (size_t k = 0; k < num; k++) {
+				printf("%ld ", dims[k]);
+			}
+			printf(")\n");
+			free(dims);
 		}
 	}
 
