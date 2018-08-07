@@ -14,5 +14,6 @@
 #include "error.h"
 
 void displayPlatformInfo(cl_platform_id platformID, cl_platform_info platformInfo, const char* str);
+
 #endif // !UTILITY_H
 

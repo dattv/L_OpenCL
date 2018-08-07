@@ -1,7 +1,6 @@
+#include "discovery_platforms.h"
 
-#include "utility.h"
-
-int main() {
+void displayPlatform() {
 
 	cl_uint numOfPlatform;
 	cl_int err;
@@ -27,6 +26,4 @@ int main() {
 		displayPlatformInfo(platformID[i], CL_PLATFORM_EXTENSIONS, "CL_PLATFORM_EXTENSIONS");
 
 	}
-	getchar();
-	return 0;
 }
